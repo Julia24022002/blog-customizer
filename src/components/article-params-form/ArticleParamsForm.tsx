@@ -7,7 +7,7 @@ import styles from './ArticleParamsForm.module.scss';
 export const ArticleParamsForm = () => {
 	return (
 		<>
-			<ArrowButton isOpen={true} onClick={() => {}} />
+			<ArrowButton isOpen={false} onClick={() => {}} />
 			<aside className={clsx(styles.container, styles.container_open)}>
 				<form className={styles.form}>
 					<div className={styles.bottomContainer}>
