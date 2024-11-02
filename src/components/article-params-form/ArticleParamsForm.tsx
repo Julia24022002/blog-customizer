@@ -3,7 +3,6 @@ import { Button } from 'src/ui/button';
 import { RadioGroup } from 'src/ui/radio-group';
 import { Select } from 'src/ui/select';
 import { Separator } from 'src/ui/separator';
-// import { StoryDecorator } from 'src/ui/story-decorator';
 import { Text } from 'src/ui/text';
 import {
 	ArticleStateType,
@@ -15,7 +14,8 @@ import {
 	fontSizeOptions,
 	OptionType,
 } from 'src/constants/articleProps';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+import { useOutsideClickClose } from 'src/ui/select/hooks/useOutsideClickClose';
 
 import clsx from 'clsx';
 import styles from './ArticleParamsForm.module.scss';
@@ -28,6 +28,7 @@ export const ArticleParamsForm = ({ onApply }: ArticleParamsFormProps) => {
 	const [isOpen, setIsOpen] = useState<boolean>(false); //открытие закрытие по стрелочке
 	const [articleState, setArticleState] =
 		useState<ArticleStateType>(defaultArticleState);
+	const rootRef = useRef<HTMLDivElement>(null);
 
 	const handleChange = (key: keyof ArticleStateType, value: OptionType) => {
 		setArticleState({ ...articleState, [key]: value });
@@ -44,8 +45,16 @@ export const ArticleParamsForm = ({ onApply }: ArticleParamsFormProps) => {
 		setArticleState(defaultArticleState);
 	};
 
+	useOutsideClickClose({
+		isOpen,
+		rootRef,
+		onClose: () => setIsOpen(false),
+		onChange: setIsOpen,
+		event: 'mousedown',
+	});
+
 	return (
-		<>
+		<div ref={rootRef}>
 			<ArrowButton isOpen={isOpen} onClick={() => setIsOpen(!isOpen)} />
 			<aside
 				className={clsx(styles.container, isOpen && styles.container_open)}>
@@ -117,6 +126,6 @@ export const ArticleParamsForm = ({ onApply }: ArticleParamsFormProps) => {
 					</div>
 				</form>
 			</aside>
-		</>
+		</div>
 	);
 };
